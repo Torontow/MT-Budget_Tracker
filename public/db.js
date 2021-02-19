@@ -33,36 +33,38 @@ const saveRecord = record => {
   store.add(record)
 }
 
-// const checkDatabase = () => {
-//   // Create a transaction on "pending".
-//   const transaction = db.transaction(['pending'], 'readwrite')
-//   // Access "pending".
-//   const store = transaction.objectStore('pending')
-//   // Retrieve all records from the store.
-//   const getAll = store.getAll()
+const checkDatabase = () => {
+  // Create a transaction on "pending".
+  const transaction = db.transaction(['pending'], 'readwrite')
+  // Access "pending".
+  const pendingStore = transaction.objectStore('pending')
+  // Retrieve all records from the store.
+  const getAll = pendingStore.getAll()
+  console.log(getAll);
 
-//   getAll.onsuccess = () => {
-//     if (getAll.result.length > 0) {
-//       fetch('/api/transaction/bulk', {
-//         method: 'POST',
-//         body: JSON.stringify(getAll.result),
-//         headres: {
-//           Accept: 'application/json, text/plain, */*',
-//           'Content-Type': 'application/json'
-//         }
-//       })
-//         .then(response => response.json())
-//         .then(() => {
-//           // If successful, open a transaction on the "pending" db
-//           const transaction = db.transaction(['pending'], 'readwrite')
-//           // Access "pending" object store
-//           const store = transaction.objectStore('pending')
-//           // clear items in store
-//           store.clear()
-//         })
-//     }
-//   }
-// }
+  getAll.onsuccess = () => {
+    console.log("this is", getAll)
+    if (getAll.result.length > 0) {
+      fetch('/api/transaction/bulk', {
+        method: 'POST',
+        body: JSON.stringify(getAll.result),
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(() => {
+          // If successful, open a transaction on the "pending" db
+          const transaction = db.transaction(['pending'], 'readwrite')
+          // Access "pending" object store
+          const store = transaction.objectStore('pending')
+          // clear items in store
+          store.clear()
+        })
+    }
+  }
+}
 
 // Check if the app is back online.
 window.addEventListener('online', checkDatabase)
