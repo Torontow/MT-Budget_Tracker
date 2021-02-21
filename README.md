@@ -18,7 +18,7 @@ You earn money, you spend money, you respect money. You're diligent about keepin
 
 ## Installation
 
-Simply navigate to .
+Simply navigate to https://polar-springs-63842.herokuapp.com.
 
 ## Usage
 
